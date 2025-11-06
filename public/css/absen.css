@@ -1,0 +1,736 @@
+/* Absen Page Styles */
+.absen-body {
+    background: white;
+    height: 100vh;
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.absen-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.absen-header {
+    text-align: center;
+    margin-bottom: 8px;
+    padding: 10px 0px;
+}
+
+.absen-header h1 {
+    color: #ff6b35;
+    font-size: 28px;
+    font-weight: 800;
+    margin: -5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
+}
+
+.absen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+    max-height: calc(100vh - 80px);
+    overflow: hidden;
+}
+
+.absen-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.card-header-orange {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: white;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+}
+
+.card-header-orange h2 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.qr-icon {
+    font-size: 20px;
+}
+
+/* Waktu Card */
+.waktu-card {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.clock-container {
+    padding: 15px;
+    text-align: center;
+    background-image: url('../images/venue.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 0;
+}
+
+.clock-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 0;
+}
+
+#analogClock,
+.clock-text {
+    position: relative;
+    z-index: 1;
+}
+
+#analogClock {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    width: 300px;
+    height: 300px;
+}
+
+.clock-text {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-footer-gradient {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+#dateDisplay {
+    display: block;
+}
+
+
+.logo-circle-orange {
+    width: 280px;
+    height: 280px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.logo-tut-wuri {
+    text-align: center;
+    color: white;
+}
+
+.logo-tut-wuri svg {
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.logo-text-small {
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #333;
+    text-align: center;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+/* Absen Terakhir Card */
+.absen-terakhir-card {
+    grid-column: 3;
+    grid-row: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-image: url('../images/james.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.absen-terakhir-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 0;
+}
+
+.absen-terakhir-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.absen-list::-webkit-scrollbar {
+    display: none;
+}
+
+.absen-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 5px 15px 15px 15px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+}
+
+
+.absen-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.absen-item:last-child {
+    border-bottom: none;
+}
+
+.absen-item-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.absen-item-content {
+    flex: 1;
+}
+
+.absen-item-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.absen-item-role {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.absen-item-time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Absen Masuk Card */
+.absen-masuk-card {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/* Logo Header Section */
+.logo-header-section {
+    padding: 10px;
+    background: white;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.logo-company-image {
+    width: 100%;
+    height: auto;
+    max-height: 80px;
+    object-fit: contain;
+    display: block;
+}
+
+.logo-text-section {
+    flex: 1;
+}
+
+.logo-company-name {
+    color: #11998e;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.logo-company-tagline {
+    color: #333;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.card-header-absen {
+    background: white;
+    color: #ff6b35;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.absen-masuk-card .card-header-orange {
+    margin-top: 0;
+}
+
+.card-header-absen h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #ff6b35;
+}
+
+.scanner-icon {
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.scanner-icon svg {
+    animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.alert-box-success-yellow {
+    background: #fff9c4;
+    border: 1px solid #fdd835;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.alert-box-success-yellow .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.alert-box-success-yellow .close-btn:hover {
+    background: #fdd835;
+    color: #333;
+}
+
+.alert-box {
+    margin: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.alert-box.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-box.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.absen-content {
+    padding: 15px 15px 5px 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 0;
+}
+
+.barcode-container {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.barcode-placeholder {
+    display: inline-block;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.barcode-placeholder svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.barcode-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 150px;
+    object-fit: contain;
+}
+
+.absen-form {
+    /* Jangan biarkan form mengembang mendorong elemen berikutnya ke bawah */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0px;
+    padding-bottom: 0;
+    gap: 0;
+}
+
+.form-group-absen {
+    margin-bottom: 15px;
+}
+
+.motivasi-text {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 12px;
+    color: #2e7d32; /* hijau tegas tapi lembut */
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.disabled-input {
+    background-color: #e9ecef !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    border-color: #ced4da !important;
+}
+
+.disabled-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    box-shadow: none !important;
+}
+
+.disabled-btn:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.absen-input-custom {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+    background: #f5f5f5;
+    color: #333;
+    font-weight: 500;
+}
+
+.absen-input-custom:focus {
+    outline: none;
+    border-color: #ff6b35;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.absen-input-custom::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.button-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0;
+}
+
+.btn-scan {
+    flex: 1;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.btn-scan:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+}
+
+.btn-scan:active {
+    transform: translateY(0);
+}
+
+.btn-login {
+    flex: 1;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+    color: white;
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Footer */
+.absen-footer {
+    margin-top: 40px;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-top: 2px solid #e9ecef;
+    border-radius: 12px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.footer-section h3 {
+    color: #ff6b35;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-section p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 5px 0;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+    margin-top: 20px;
+}
+
+.footer-bottom p {
+    color: #999;
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .absen-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .absen-logo {
+        grid-column: 1 / 3;
+        grid-row: 1;
+    }
+
+    .waktu-card {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .absen-terakhir-card {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .absen-masuk-card {
+        grid-column: 1 / 3;
+        grid-row: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .absen-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .absen-logo {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .waktu-card {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .absen-terakhir-card {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    .absen-masuk-card {
+        grid-column: 1;
+        grid-row: 4;
+    }
+
+    .absen-header h1 {
+        font-size: 22px;
+    }
+
+    .card-header-orange h2 {
+        font-size: 16px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Updated: 20251105131114 */
