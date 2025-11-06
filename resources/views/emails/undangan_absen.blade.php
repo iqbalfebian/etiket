@@ -146,28 +146,28 @@
             <h3>QR CODE ABSENSI ANDA</h3>
             <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Screenshot atau simpan QR Code di bawah ini:</p>
             <div class="qrcode-image" style="background: white; padding: 20px; border-radius: 8px; display: inline-block; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <p style="color: #666; font-size: 14px; margin: 20px 0;">
-                    <strong>QR Code Anda dilampirkan sebagai file attachment</strong><br>
-                    Silakan download file <strong>QRCode_{{ $karyawan->nik }}.png</strong> yang terlampir di email ini.
-                </p>
-                <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0;">
-                    <p style="margin: 0; color: #856404; font-size: 13px;">
-                        💡 <strong>Tips:</strong> Scroll ke bawah email ini dan download file QR Code yang terlampir, 
-                        lalu screenshot atau simpan untuk digunakan saat absensi.
-                    </p>
-                </div>
+                <!-- QR Code embedded langsung di body email -->
+                <img src="data:image/png;base64,{{ $qrcodeBase64 }}" 
+                     alt="QR Code Absensi {{ $karyawan->nik }}" 
+                     style="max-width: 300px; height: auto; display: block; margin: 0 auto; border: 3px solid #ff6b35; border-radius: 8px;" />
             </div>
             <p style="color: #ff6b35; font-size: 18px; font-weight: 700; margin-top: 20px;">NIK: {{ $karyawan->nik }}</p>
+            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px auto; max-width: 500px;">
+                <p style="margin: 0; color: #856404; font-size: 13px;">
+                    💡 <strong>Tips:</strong> Screenshot QR Code di atas dan simpan di HP Anda untuk digunakan saat absensi. 
+                    QR Code juga dilampirkan sebagai file attachment untuk backup.
+                </p>
+            </div>
         </div>
 
         <div class="instruction">
             <h4>Cara Menggunakan QR Code:</h4>
             <ol style="margin: 10px 0; padding-left: 20px;">
-                <li><strong>Download attachment</strong> QR Code yang terlampir di email ini</li>
-                <li><strong>Screenshot</strong> atau <strong>simpan</strong> QR Code ke HP Anda</li>
+                <li><strong>Screenshot</strong> QR Code di atas dan simpan ke HP Anda</li>
                 <li>Tunjukkan QR Code saat tiba di lokasi seminar</li>
                 <li>Petugas akan scan QR Code Anda untuk absensi</li>
-                <li>Atau Anda bisa input NIK <strong>{{ $karyawan->nik }}</strong> di mesin absen</li>
+                <li>Jika QR Code tidak bisa di-scan, input NIK <strong>{{ $karyawan->nik }}</strong> di mesin absen</li>
+                <li>File QR Code juga dilampirkan sebagai attachment untuk backup</li>
             </ol>
         </div>
 

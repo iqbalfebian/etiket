@@ -8,16 +8,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 
-class UndanganAbsen extends Mailable
+class UndanganAbsen extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public $karyawan;
+    public $qrcodeBase64;
 
     /**
      * Create a new message instance.
@@ -25,6 +27,27 @@ class UndanganAbsen extends Mailable
     public function __construct(Karyawan $karyawan)
     {
         $this->karyawan = $karyawan;
+        
+        // Generate QR Code saat construct agar tersedia untuk view
+        $this->generateQRCode();
+    }
+
+    /**
+     * Generate QR Code dan convert ke base64
+     */
+    private function generateQRCode()
+    {
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->data($this->karyawan->nik)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+            ->size(300)
+            ->margin(10)
+            ->build();
+        
+        // Convert to base64 untuk embed di email
+        $this->qrcodeBase64 = base64_encode($result->getString());
     }
 
     /**
@@ -47,6 +70,7 @@ class UndanganAbsen extends Mailable
             view: 'emails.undangan_absen',
             with: [
                 'karyawan' => $this->karyawan,
+                'qrcodeBase64' => $this->qrcodeBase64,
                 'tanggalSeminar' => '5 November 2025',
                 'waktuSeminar' => '09:00 - 17:00 WIB',
                 'tempatSeminar' => 'Hotel Primebiz, Cikarang',
@@ -62,7 +86,7 @@ class UndanganAbsen extends Mailable
      */
     public function attachments(): array
     {
-        // Generate QR Code menggunakan endroid/qr-code (tidak perlu imagick)
+        // Tetap attach QR code sebagai file untuk backup
         $result = Builder::create()
             ->writer(new PngWriter())
             ->data($this->karyawan->nik)

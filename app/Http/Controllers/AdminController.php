@@ -736,7 +736,8 @@ class AdminController extends Controller
 
         foreach ($karyawanWithEmail as $karyawan) {
             try {
-                Mail::to($karyawan->email)->send(new UndanganAbsen($karyawan));
+                // Kirim email menggunakan queue untuk background processing
+                Mail::to($karyawan->email)->queue(new UndanganAbsen($karyawan));
                 $sent++;
             } catch (\Exception $e) {
                 $failed++;
@@ -744,7 +745,7 @@ class AdminController extends Controller
             }
         }
 
-        $message = "Berhasil mengirim undangan ke {$sent} karyawan.";
+        $message = "Berhasil menambahkan {$sent} email ke antrian pengiriman.";
         if ($failed > 0) {
             $message .= " Gagal mengirim ke {$failed} karyawan.";
             if (!empty($errors)) {
@@ -768,8 +769,9 @@ class AdminController extends Controller
         }
 
         try {
-            Mail::to($karyawan->email)->send(new UndanganAbsen($karyawan));
-            return redirect()->route('admin.karyawan')->with('success', "Berhasil mengirim undangan ke {$karyawan->nama_lengkap}!");
+            // Kirim email menggunakan queue untuk background processing
+            Mail::to($karyawan->email)->queue(new UndanganAbsen($karyawan));
+            return redirect()->route('admin.karyawan')->with('success', "Email undangan untuk {$karyawan->nama_lengkap} telah ditambahkan ke antrian pengiriman!");
         } catch (\Exception $e) {
             return redirect()->route('admin.karyawan')->with('error', "Gagal mengirim email ke {$karyawan->nama_lengkap}: " . $e->getMessage());
         }
