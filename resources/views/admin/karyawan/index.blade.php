@@ -4,8 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Karyawan - Admin</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ time() }}">
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .alert-success {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
 </head>
 <body class="admin-body admin-purple-theme">
     <nav class="navbar">
@@ -37,14 +53,25 @@
             </div>
             <div class="card-body">
                 @if(session('success'))
-                    <div class="alert alert-success" style="margin-bottom: 8px;">
+                    <div class="alert alert-success" style="margin-bottom: 8px; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 16px 20px; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border-left: 4px solid #047857; animation: slideIn 0.3s ease-out;">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="alert alert-danger" style="margin-bottom: 8px; background: #ef4444; color: white; padding: 12px 16px; border-radius: 8px;">
-                        {{ session('error') }}
+                    <div class="alert alert-danger" style="margin-bottom: 8px; background: #ef4444; color: white; padding: 12px 16px; border-radius: 8px; font-weight: 600; border-left: 4px solid #dc2626;">
+                        ❌ {{ session('error') }}
+                    </div>
+                @endif
+                
+                @if($errors->any())
+                    <div class="alert alert-danger" style="margin-bottom: 8px; background: #ef4444; color: white; padding: 12px 16px; border-radius: 8px; font-weight: 600; border-left: 4px solid #dc2626;">
+                        <strong>❌ Error:</strong>
+                        <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 @endif
 

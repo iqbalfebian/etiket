@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -330,28 +331,165 @@ class AdminController extends Controller
 
     public function karyawanImport(Request $request)
     {
-        $request->validate([
-            'excel_file' => 'required|mimes:xlsx,xls,csv|max:10240',
-        ]);
-
         try {
+            // Validasi file berdasarkan extension, bukan MIME type (lebih fleksibel untuk CSV)
+            $request->validate([
+                'excel_file' => 'required|max:10240',
+            ], [
+                'excel_file.required' => 'File harus diisi!',
+                'excel_file.max' => 'Ukuran file maksimal 10MB!',
+            ]);
+
             $file = $request->file('excel_file');
-            $extension = $file->getClientOriginalExtension();
+            
+            if (!$file) {
+                return redirect()->route('admin.karyawan')->with('error', 'File tidak ditemukan! Pastikan file sudah dipilih.');
+            }
+            
+            // Deteksi extension dari nama file dan MIME type
+            $extension = strtolower($file->getClientOriginalExtension());
+            $mimeType = $file->getMimeType();
+            
+            // Jika extension tidak ada, coba deteksi dari MIME type
+            if (empty($extension)) {
+                $mimeToExtension = [
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+                    'application/vnd.ms-excel' => 'xls',
+                    'text/csv' => 'csv',
+                    'text/plain' => 'csv', // CSV sering terdeteksi sebagai text/plain
+                    'application/csv' => 'csv',
+                ];
+                if (isset($mimeToExtension[$mimeType])) {
+                    $extension = $mimeToExtension[$mimeType];
+                }
+            }
+            
+            // Validasi extension
+            if (!in_array($extension, ['xlsx', 'xls', 'csv'])) {
+                $errorMsg = 'Format file tidak didukung! ';
+                $errorMsg .= 'Extension yang terdeteksi: ' . ($extension ?: 'tidak ada') . '. ';
+                $errorMsg .= 'MIME type: ' . $mimeType . '. ';
+                $errorMsg .= 'Gunakan format .xlsx, .xls, atau .csv';
+                return redirect()->route('admin.karyawan')->with('error', $errorMsg);
+            }
             
             if ($extension == 'csv') {
-                $data = array_map('str_getcsv', file($file->getRealPath()));
+                // Baca file CSV dengan handling encoding dan BOM
+                $filePath = $file->getRealPath();
+                $content = file_get_contents($filePath);
+                
+                // Remove BOM UTF-8 jika ada
+                if (substr($content, 0, 3) == chr(0xEF).chr(0xBB).chr(0xBF)) {
+                    $content = substr($content, 3);
+                }
+                
+                // Coba detect encoding
+                $encoding = mb_detect_encoding($content, ['UTF-8', 'Windows-1252', 'ISO-8859-1'], true);
+                if ($encoding && $encoding != 'UTF-8') {
+                    $content = mb_convert_encoding($content, 'UTF-8', $encoding);
+                }
+                
+                // Simpan ke temporary file
+                $tempFile = tempnam(sys_get_temp_dir(), 'csv_import_');
+                file_put_contents($tempFile, $content);
+                
+                // Baca CSV dengan berbagai delimiter
+                $data = [];
+                $delimiters = [',', ';', "\t"];
+                $delimiter = ',';
+                
+                foreach ($delimiters as $del) {
+                    $handle = fopen($tempFile, 'r');
+                    if ($handle !== false) {
+                        $testRow = fgetcsv($handle, 0, $del);
+                        fclose($handle);
+                        if (is_array($testRow) && count($testRow) > 1) {
+                            $delimiter = $del;
+                            break;
+                        }
+                    }
+                }
+                
+                // Baca semua baris dengan delimiter yang tepat
+                $handle = fopen($tempFile, 'r');
+                if ($handle !== false) {
+                    while (($row = fgetcsv($handle, 0, $delimiter)) !== false) {
+                        // Clean up setiap cell (remove BOM dan whitespace)
+                        $row = array_map(function($cell) {
+                            $cell = trim($cell);
+                            // Remove BOM dari cell jika ada
+                            if (substr($cell, 0, 3) == chr(0xEF).chr(0xBB).chr(0xBF)) {
+                                $cell = substr($cell, 3);
+                            }
+                            return $cell;
+                        }, $row);
+                        $data[] = $row;
+                    }
+                    fclose($handle);
+                }
+                unlink($tempFile);
+                
+                // Ambil header
+                if (empty($data)) {
+                    return redirect()->route('admin.karyawan')->with('error', 'File CSV kosong atau tidak dapat dibaca!');
+                }
+                
                 $header = array_shift($data);
+                // Clean header dari BOM
+                $header = array_map(function($h) {
+                    $h = trim($h);
+                    if (substr($h, 0, 3) == chr(0xEF).chr(0xBB).chr(0xBF)) {
+                        $h = substr($h, 3);
+                    }
+                    return $h;
+                }, $header);
             } else {
                 // Untuk Excel, gunakan library PhpSpreadsheet jika ada
-                if (class_exists('\PhpOffice\PhpSpreadsheet\IOFactory')) {
-                    $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getRealPath());
-                    $spreadsheet = $reader->load($file->getRealPath());
-                    $worksheet = $spreadsheet->getActiveSheet();
-                    $rows = $worksheet->toArray();
-                    $header = array_shift($rows);
-                    $data = $rows;
+                if (class_exists('PhpOffice\PhpSpreadsheet\IOFactory')) {
+                    try {
+                        /** @var \PhpOffice\PhpSpreadsheet\Reader\IReader $reader */
+                        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getRealPath());
+                        $spreadsheet = $reader->load($file->getRealPath());
+                        $worksheet = $spreadsheet->getActiveSheet();
+                        $rows = $worksheet->toArray();
+                        
+                        // Filter baris kosong dan ambil header
+                        if (empty($rows)) {
+                            return redirect()->route('admin.karyawan')->with('error', 'File Excel kosong atau tidak dapat dibaca!');
+                        }
+                        
+                        $header = array_shift($rows);
+                        
+                        // Clean header - hapus null/empty dan trim
+                        $header = array_map(function($h) {
+                            if ($h === null) return '';
+                            $h = trim((string)$h);
+                            // Remove BOM jika ada
+                            if (substr($h, 0, 3) == chr(0xEF).chr(0xBB).chr(0xBF)) {
+                                $h = substr($h, 3);
+                            }
+                            return $h;
+                        }, $header);
+                        
+                        // Filter data - hanya ambil baris yang tidak kosong
+                        $data = [];
+                        foreach ($rows as $row) {
+                            // Clean row - hapus null dan trim
+                            $cleanRow = array_map(function($cell) {
+                                if ($cell === null) return '';
+                                return trim((string)$cell);
+                            }, $row);
+                            
+                            // Skip jika semua cell kosong
+                            if (!empty(array_filter($cleanRow))) {
+                                $data[] = $cleanRow;
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        return redirect()->route('admin.karyawan')->with('error', 'Error membaca file Excel: ' . $e->getMessage() . '. Pastikan file Excel tidak corrupt dan format benar.');
+                    }
                 } else {
-                    return redirect()->route('admin.karyawan')->with('error', 'Library PhpSpreadsheet belum terinstall. Install dengan: composer require phpoffice/phpspreadsheet');
+                    return redirect()->route('admin.karyawan')->with('error', 'Untuk file Excel (.xlsx/.xls), library PhpSpreadsheet diperlukan. Install dengan: composer require phpoffice/phpspreadsheet. Atau gunakan format CSV.');
                 }
             }
 
@@ -366,7 +504,7 @@ class AdminController extends Controller
                 'alamat' => ['alamat', 'address'],
                 'email' => ['email', 'e-mail', 'mail'],
                 'no_telp' => ['no telp', 'no telpon', 'no telephone', 'telepon', 'telp', 'phone', 'hp', 'handphone'],
-                'tanggal_masuk_kerja' => ['tanggal masuk kerja', 'tgl masuk', 'join date'],
+                'tanggal_masuk_kerja' => ['tanggal masuk kerja', 'tanggal masuk', 'tgl masuk kerja', 'tgl masuk', 'join date'],
                 'status_karyawan' => ['status karyawan', 'status', 'employee status'],
                 'departemen' => ['departemen', 'department'],
                 'plant' => ['plant'],
@@ -374,18 +512,34 @@ class AdminController extends Controller
 
             // Normalize header
             $normalizedHeader = [];
+            $unmappedHeaders = [];
             foreach ($header as $idx => $h) {
                 $h = strtolower(trim($h));
+                $found = false;
                 foreach ($headerMap as $dbField => $excelFields) {
                     if (in_array($h, $excelFields)) {
                         $normalizedHeader[$idx] = $dbField;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found && !empty($h)) {
+                    $unmappedHeaders[] = $h;
+                }
+            }
+
+            // Validasi header yang dibaca
+            if (empty($normalizedHeader)) {
+                return redirect()->route('admin.karyawan')->with('error', 'Tidak ada kolom yang dikenali! Header yang dibaca: ' . implode(', ', array_filter($header)) . '. Pastikan format CSV sesuai template.');
             }
 
             $imported = 0;
             $errors = [];
+            
+            // Tambahkan warning jika ada header yang tidak dikenali
+            if (!empty($unmappedHeaders)) {
+                $errors[] = "Warning: Kolom tidak dikenali: " . implode(', ', $unmappedHeaders);
+            }
 
             foreach ($data as $rowIndex => $row) {
                 if (empty(array_filter($row))) continue; // Skip empty rows
@@ -422,10 +576,10 @@ class AdminController extends Controller
                         continue;
                     }
 
-                    // Check if NIK already exists
+                    // Check if NIK already exists - skip jika sudah ada (tidak perlu error, hanya skip)
                     $existing = Karyawan::where('nik', $karyawanData['nik'])->first();
                     if ($existing) {
-                        $errors[] = "Baris " . ($rowIndex + 2) . ": NIK " . $karyawanData['nik'] . " sudah ada";
+                        // Skip jika NIK sudah ada, tidak perlu error (untuk re-import yang aman)
                         continue;
                     }
 
@@ -452,14 +606,61 @@ class AdminController extends Controller
                 }
             }
 
-            $message = "Berhasil mengimpor {$imported} karyawan.";
-            if (!empty($errors)) {
-                $message .= " Terjadi " . count($errors) . " error: " . implode(', ', array_slice($errors, 0, 5));
+            // Jika ada yang berhasil diimport, tampilkan success message
+            if ($imported > 0) {
+                $message = "✅ Berhasil mengimpor {$imported} karyawan!";
+                if (!empty($errors)) {
+                    $message .= " Terdapat " . count($errors) . " error/warning: " . implode(', ', array_slice($errors, 0, 3));
+                }
+
+                // Log success
+                Log::info('Import Karyawan Success', [
+                    'imported' => $imported,
+                    'errors_count' => count($errors)
+                ]);
+
+                return redirect()->route('admin.karyawan')->with('success', $message);
             }
 
-            return redirect()->route('admin.karyawan')->with('success', $message);
+            // Jika tidak ada yang diimport dan tidak ada error, berarti tidak ada data valid
+            if (empty($errors)) {
+                $headerInfo = !empty($header) ? implode(', ', array_filter($header)) : 'Tidak ada header';
+                $dataInfo = !empty($data) ? count($data) . ' baris data' : 'Tidak ada data';
+                $errorMsg = 'Tidak ada data yang diimpor! Header yang dibaca: ' . $headerInfo . '. Data yang ditemukan: ' . $dataInfo . '. Pastikan file berisi data valid setelah header.';
+                
+                // Log untuk debugging
+                Log::warning('Import Karyawan: No data imported', [
+                    'headers' => $header,
+                    'data_count' => count($data),
+                    'normalized_headers' => isset($normalizedHeader) ? $normalizedHeader : [],
+                    'data_preview' => !empty($data) ? array_slice($data, 0, 2) : []
+                ]);
+                
+                return redirect()->route('admin.karyawan')->with('error', $errorMsg);
+            }
+
+            // Jika ada error dan tidak ada yang diimport
+            $errorMsg = 'Gagal mengimpor data! ';
+            $errorMsg .= count($errors) . " error: " . implode(', ', array_slice($errors, 0, 5));
+            
+            return redirect()->route('admin.karyawan')->with('error', $errorMsg);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            $errors = $e->errors();
+            $errorMessage = 'Validasi gagal: ';
+            foreach ($errors as $field => $messages) {
+                $errorMessage .= implode(', ', $messages);
+            }
+            return redirect()->route('admin.karyawan')->with('error', $errorMessage);
         } catch (\Exception $e) {
-            return redirect()->route('admin.karyawan')->with('error', 'Error mengimpor file: ' . $e->getMessage());
+            // Log error untuk debugging
+            Log::error('Import Karyawan Error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->route('admin.karyawan')->with('error', 'Error mengimpor file: ' . $e->getMessage() . '. Pastikan format file sesuai template. File harus berisi header dan data.');
         }
     }
 
