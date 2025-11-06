@@ -106,6 +106,76 @@
             margin-top: 20px;
             text-align: center;
         }
+        
+        /* Mobile Responsive Styles */
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 10px !important;
+                background-color: #f5f5f5 !important;
+            }
+            .container {
+                padding: 15px !important;
+                border-radius: 8px !important;
+            }
+            .header {
+                margin-bottom: 20px !important;
+                padding-bottom: 15px !important;
+            }
+            .header h1 {
+                font-size: 20px !important;
+            }
+            .greeting {
+                font-size: 14px !important;
+                margin-bottom: 15px !important;
+            }
+            .content {
+                margin-bottom: 20px !important;
+                font-size: 14px !important;
+            }
+            .info-box {
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+            }
+            .info-row {
+                flex-direction: column !important;
+                padding: 6px 0 !important;
+            }
+            .info-label {
+                font-size: 13px !important;
+                margin-bottom: 4px !important;
+            }
+            .info-value {
+                font-size: 13px !important;
+            }
+            .qrcode-section {
+                margin: 20px 0 !important;
+                padding: 15px !important;
+            }
+            .qrcode-section h3 {
+                font-size: 18px !important;
+                margin-bottom: 12px !important;
+            }
+            .qrcode-image {
+                margin: 15px 0 !important;
+                padding: 15px !important;
+            }
+            .instruction {
+                padding: 12px !important;
+                margin-top: 15px !important;
+            }
+            .instruction h4 {
+                font-size: 16px !important;
+            }
+            .instruction ol {
+                font-size: 13px !important;
+                padding-left: 20px !important;
+            }
+            .footer {
+                margin-top: 20px !important;
+                padding-top: 15px !important;
+                font-size: 12px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -138,22 +208,22 @@
             </div>
             <div class="info-row">
                 <span class="info-label">NIK Anda:</span>
-                <span class="info-value" style="font-weight: 700; color: #ff6b35; font-size: 18px;">{{ $karyawan->nik }}</span>
+                <span class="info-value" style="font-weight: 700; color: #ff6b35; font-size: 16px; word-break: break-all;">{{ $karyawan->nik }}</span>
             </div>
         </div>
 
         <div class="qrcode-section">
             <h3>QR CODE ABSENSI ANDA</h3>
-            <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Screenshot atau simpan QR Code di bawah ini:</p>
-            <div class="qrcode-image" style="background: white; padding: 20px; border-radius: 8px; display: inline-block; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <p style="color: #666; margin-bottom: 20px; font-size: 14px; margin-bottom: 15px;">Screenshot atau simpan QR Code di bawah ini:</p>
+            <div class="qrcode-image" style="background: white; padding: 12px; border-radius: 8px; display: inline-block; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: calc(100% - 20px);">
                 <!-- QR Code embedded menggunakan CID (Content-ID) -->
                 <img src="{{ $message->embed($qrcodePath) }}" 
                      alt="QR Code Absensi {{ $karyawan->nik }}" 
-                     style="max-width: 300px; height: auto; display: block; margin: 0 auto; border: 3px solid #ff6b35; border-radius: 8px;" />
+                     style="max-width: 100%; width: 220px; height: auto; display: block; margin: 0 auto; border: 2px solid #ff6b35; border-radius: 6px;" />
             </div>
-            <p style="color: #ff6b35; font-size: 18px; font-weight: 700; margin-top: 20px;">NIK: {{ $karyawan->nik }}</p>
-            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px auto; max-width: 500px;">
-                <p style="margin: 0; color: #856404; font-size: 13px;">
+            <p style="color: #ff6b35; font-size: 18px; font-weight: 700; margin-top: 15px; margin-bottom: 15px;">NIK: {{ $karyawan->nik }}</p>
+            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 12px; margin: 15px auto; max-width: 100%;">
+                <p style="margin: 0; color: #856404; font-size: 13px; line-height: 1.5;">
                     💡 <strong>Tips:</strong> Screenshot QR Code di atas dan simpan di HP Anda untuk digunakan saat absensi. 
                     QR Code juga dilampirkan sebagai file attachment untuk backup.
                 </p>
