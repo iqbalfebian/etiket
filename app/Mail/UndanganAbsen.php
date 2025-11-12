@@ -63,7 +63,6 @@ class UndanganAbsen extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new \Illuminate\Mail\Mailables\Address('ardyansyahputra174@gmail.com', 'PT. Mada Wikri Tunggal'),
             subject: 'Undangan Seminar - PT Mada Wikri Tunggal',
         );
     }
