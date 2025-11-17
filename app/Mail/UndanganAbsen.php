@@ -63,7 +63,7 @@ class UndanganAbsen extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Undangan Seminar - PT Mada Wikri Tunggal',
+            subject: 'Undangan Level UP Session - PT Mada Wikri Tunggal',
         );
     }
 

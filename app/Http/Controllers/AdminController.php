@@ -724,7 +724,7 @@ class AdminController extends Controller
                 $pesan .= "📍 *Tempat:* Hotel Primebiz, Cikarang\n\n";
                 $pesan .= "🆔 *No. Peserta Anda:*\n";
                 $pesan .= "*{$peserta->no_peserta}*\n\n";
-                $pesan .= "📱 QR Code absensi akan dikirim setelah pesan ini melalui email, harap cek email anda.\n\n";
+                $pesan .= "📱 QR Code absensi akan dikirim setelah pesan ini melalui email yang terdaftar yaitu *{$peserta->email}*, harap cek email anda.\n\n";
                 $pesan .= "✅ *Mohon balas pesan ini dengan kata \"HADIR\" untuk konfirmasi kehadiran Anda.*\n\n";
                 $pesan .= "Terima kasih.\n\n";
                 $pesan .= 'PT. Mada Wikri Tunggal';
@@ -788,7 +788,7 @@ class AdminController extends Controller
             $pesan .= "📍 *Tempat:* Hotel Primebiz, Cikarang\n\n";
             $pesan .= "🆔 *No. Peserta Anda:*\n";
             $pesan .= "*{$peserta->no_peserta}*\n\n";
-            $pesan .= "📱 QR Code absensi akan dikirim setelah pesan ini melalui email, harap cek email anda.\n\n";
+            $pesan .= "📱 📱 QR Code absensi akan dikirim setelah pesan ini melalui email yang terdaftar yaitu *{$peserta->email}*, harap cek email anda.\n\n";
             $pesan .= "✅ *Mohon balas pesan ini dengan kata \"HADIR\" untuk konfirmasi kehadiran Anda.*\n\n";
             $pesan .= "Terima kasih.\n\n";
             $pesan .= 'PT. Mada Wikri Tunggal';
@@ -945,20 +945,21 @@ class AdminController extends Controller
     public function absenSearchPeserta(Request $request)
     {
         $query = $request->get('q', '');
-        
+
         if (empty($query)) {
             return response()->json([]);
         }
 
-        $peserta = Peserta::where(function($q) use ($query) {
-                $q->where('nama_lengkap', 'like', '%' . $query . '%')
-                  ->orWhere('no_peserta', 'like', '%' . $query . '%')
-                  ->orWhere('email', 'like', '%' . $query . '%')
-                  ->orWhere('no_hp', 'like', '%' . $query . '%');
-            })
+        $peserta = Peserta::where(function ($q) use ($query) {
+            $q
+                ->where('nama_lengkap', 'like', '%' . $query . '%')
+                ->orWhere('no_peserta', 'like', '%' . $query . '%')
+                ->orWhere('email', 'like', '%' . $query . '%')
+                ->orWhere('no_hp', 'like', '%' . $query . '%');
+        })
             ->limit(10)
             ->get()
-            ->map(function($item) {
+            ->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'nama_lengkap' => $item->nama_lengkap,
