@@ -77,8 +77,8 @@ class UndanganAbsen extends Mailable implements ShouldQueue
             with: [
                 'peserta' => $this->peserta,
                 'qrcodePath' => $this->qrcodePath,
-                'tanggalSeminar' => '5 November 2025',
-                'waktuSeminar' => '09:00 - 17:00 WIB',
+                'tanggalSeminar' => '18 November 2025',
+                'waktuSeminar' => '09:00 - Selesai',
                 'tempatSeminar' => 'Hotel Primebiz, Cikarang',
                 'linkAbsen' => route('absen.index'),
             ],

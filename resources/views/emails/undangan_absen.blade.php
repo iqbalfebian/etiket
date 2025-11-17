@@ -233,11 +233,11 @@
       <div class="info-box">
         <div class="info-row">
           <span class="info-label">Hari/Tanggal:</span>
-          <span class="info-value">{{ \Carbon\Carbon::now()->format('l, d F Y') }}</span>
+          <span class="info-value">18 November 2025</span>
         </div>
         <div class="info-row">
           <span class="info-label">Waktu:</span>
-          <span class="info-value">08:00 - 17:00 WIB</span>
+          <span class="info-value">09:00 - selesai</span>
         </div>
         <div class="info-row">
           <span class="info-label">Tempat:</span>

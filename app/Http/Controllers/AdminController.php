@@ -719,8 +719,8 @@ class AdminController extends Controller
                 $pesan .= "Halo *{$peserta->nama_lengkap}*,\n\n";
                 $pesan .= "Dengan hormat, kami mengundang Bapak/Ibu untuk menghadiri seminar:\n";
                 $pesan .= "*Level Up Session with James Gwee*\n\n";
-                $pesan .= "📅 *Hari/Tanggal:* 5 November 2025\n";
-                $pesan .= "⏰ *Waktu:* 09:00 - 17:00 WIB\n";
+                $pesan .= "📅 *Hari/Tanggal:* 18 November 2025\n";
+                $pesan .= "⏰ *Waktu:* 09:00 - Selesai WIB\n";
                 $pesan .= "📍 *Tempat:* Hotel Primebiz, Cikarang\n\n";
                 $pesan .= "🆔 *No. Peserta Anda:*\n";
                 $pesan .= "*{$peserta->no_peserta}*\n\n";
@@ -783,8 +783,8 @@ class AdminController extends Controller
             $pesan .= "Halo *{$peserta->nama_lengkap}*,\n\n";
             $pesan .= "Dengan hormat, kami mengundang Bapak/Ibu untuk menghadiri seminar:\n";
             $pesan .= "*Level Up Session with James Gwee*\n\n";
-            $pesan .= "📅 *Hari/Tanggal:* 5 November 2025\n";
-            $pesan .= "⏰ *Waktu:* 09:00 - 17:00 WIB\n";
+            $pesan .= "📅 *Hari/Tanggal:*Selasa, 18 November 2025\n";
+            $pesan .= "⏰ *Waktu:* 09:00 - Selesai WIB\n";
             $pesan .= "📍 *Tempat:* Hotel Primebiz, Cikarang\n\n";
             $pesan .= "🆔 *No. Peserta Anda:*\n";
             $pesan .= "*{$peserta->no_peserta}*\n\n";
