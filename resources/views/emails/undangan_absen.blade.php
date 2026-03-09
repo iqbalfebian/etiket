@@ -257,7 +257,7 @@
                     <span class="info-value">Kamis, 12 Maret 2026</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">⏰ Waktu</span>
+                    <span class="info-label">⏰ Waktu:</span>
                     <span class="info-value">17:00 WIB – Selesai</span>
                 </div>
                 <div class="info-row">
