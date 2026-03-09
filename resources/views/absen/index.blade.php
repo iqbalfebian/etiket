@@ -17,7 +17,7 @@
     <div class="absen-container">
         <!-- Header -->
         <div class="absen-header">
-            <h1>DAFTAR HADIR SEMINAR PT. MADA WIKRI TUNGGAL</h1>
+            <h1>DAFTAR HADIR BUKBER PT. MADA WIKRI TUNGGAL</h1>
         </div>
 
         <!-- Main Content Grid -->
@@ -29,7 +29,7 @@
                 </div>
                 <div class="clock-container">
                     <canvas id="analogClock" width="300" height="300"></canvas>
-                    <div class="clock-text">Hotel Primebiz, Cikarang.</div>
+                    <div class="clock-text">Nuanza Hotel, Cikarang.</div>
                 </div>
                 <div class="card-footer-gradient">
                     <span id="dateDisplay"></span>
@@ -242,7 +242,7 @@
                 @endforelse
             </div>
             <div class="card-footer-gradient">
-                <span>Seminar James Gwee.</span>
+                <span>Buka Bersama 2026.</span>
             </div>
         </div>
     </div>
@@ -305,7 +305,7 @@
                 const noPesertaInput = document.getElementById('no_peserta');
                 const scanButton = document.querySelector('.btn-scan');
                 const absenContent = document.querySelector('.absen-content');
-                let countdown = 5;
+                let countdown = 3;
                 
                 if (alertElement) {
                     // Update countdown setiap detik

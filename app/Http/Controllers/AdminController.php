@@ -719,19 +719,26 @@ class AdminController extends Controller
         foreach ($pesertaWithHp as $peserta) {
             try {
                 // Buat pesan WhatsApp dengan format yang lebih bagus
-                $pesan = "🎉 *UNDANGAN SEMINAR*\n";
+                $pesan = "🌙 *UNDANGAN IFTAR GATHERING RAMADHAN 1447 H*\n";
                 $pesan .= "PT. Mada Wikri Tunggal\n\n";
+                $pesan .= "Assalamu'alaikum Wr. Wb.\n\n";
                 $pesan .= "Halo *{$peserta->nama_lengkap}*,\n\n";
-                $pesan .= "Dengan hormat, kami mengundang Bapak/Ibu untuk menghadiri seminar:\n";
-                $pesan .= "*Level Up Session with James Gwee*\n\n";
-                $pesan .= "📅 *Hari/Tanggal:* 5 November 2025\n";
-                $pesan .= "⏰ *Waktu:* 09:00 - 17:00 WIB\n";
-                $pesan .= "📍 *Tempat:* Hotel Primebiz, Cikarang\n\n";
+                $pesan .= "Dengan penuh rasa syukur, kami mengundang Bapak/Ibu untuk hadir dalam:\n";
+                $pesan .= "*🌟 Iftar Gathering Ramadhan 1447 Hijriah*\n\n";
+                $pesan .= "📅 *Hari/Tanggal:* Kamis, 12 Maret 2026\n";
+                $pesan .= "⏰ *Waktu:* 17:00 WIB – Selesai\n";
+                $pesan .= "📍 *Tempat:* Nuanza Hotel, Cikarang\n";
+                $pesan .= "🎤 *Penceramah:* Ust. Muhammad Akbar Satrio SE.Sy., M.SI\n\n";
+                $pesan .= "✨ *Rangkaian Acara:*\n";
+                $pesan .= "Ngabuburit | Live Music | Tausiyah\n";
+                $pesan .= "Santunan Anak Yatim | Peresmian Madani\n";
+                $pesan .= "Buka Puasa Bersama | Game & Doorprize\n\n";
                 $pesan .= "🆔 *No. Peserta Anda:*\n";
                 $pesan .= "*{$peserta->no_peserta}*\n\n";
-                $pesan .= "📱 QR Code absensi akan dikirim setelah pesan ini melalui email, harap cek email anda.\n\n";
-                $pesan .= "✅ *Mohon balas pesan ini dengan kata \"HADIR\" untuk konfirmasi kehadiran Anda.*\n\n";
-                $pesan .= "Terima kasih.\n\n";
+                $pesan .= "📱 QR Code absensi akan dikirim melalui email, harap cek email anda.\n\n";
+                $pesan .= "_\"Bersama dalam iman, Bertumbuh dalam kepemimpinan\"_\n\n";
+                $pesan .= "Terima kasih.\n";
+                $pesan .= "Wassalamu'alaikum Wr. Wb.\n\n";
                 $pesan .= 'PT. Mada Wikri Tunggal';
 
                 // Hitung waktu eksekusi berikutnya (random 60-90 detik)
@@ -783,19 +790,26 @@ class AdminController extends Controller
 
         try {
             // Buat pesan WhatsApp dengan format yang lebih bagus
-            $pesan = "🎉 *UNDANGAN SEMINAR*\n";
+            $pesan = "🌙 *UNDANGAN IFTAR GATHERING RAMADHAN 1447 H*\n";
             $pesan .= "PT. Mada Wikri Tunggal\n\n";
+            $pesan .= "Assalamu'alaikum Wr. Wb.\n\n";
             $pesan .= "Halo *{$peserta->nama_lengkap}*,\n\n";
-            $pesan .= "Dengan hormat, kami mengundang Bapak/Ibu untuk menghadiri seminar:\n";
-            $pesan .= "*Level Up Session with James Gwee*\n\n";
-            $pesan .= "📅 *Hari/Tanggal:* 5 November 2025\n";
-            $pesan .= "⏰ *Waktu:* 09:00 - 17:00 WIB\n";
-            $pesan .= "📍 *Tempat:* Hotel Primebiz, Cikarang\n\n";
+            $pesan .= "Dengan penuh rasa syukur, kami mengundang Bapak/Ibu untuk hadir dalam:\n";
+            $pesan .= "*🌟 Iftar Gathering Ramadhan 1447 Hijriah*\n\n";
+            $pesan .= "📅 *Hari/Tanggal:* Kamis, 12 Maret 2026\n";
+            $pesan .= "⏰ *Waktu:* 17:00 WIB – Selesai\n";
+            $pesan .= "📍 *Tempat:* Nuanza Hotel, Cikarang\n";
+            $pesan .= "🎤 *Penceramah:* Ust. Muhammad Akbar Satrio SE.Sy., M.SI\n\n";
+            $pesan .= "✨ *Rangkaian Acara:*\n";
+            $pesan .= "Ngabuburit | Live Music | Tausiyah\n";
+            $pesan .= "Santunan Anak Yatim | Peresmian Madani\n";
+            $pesan .= "Buka Puasa Bersama | Game & Doorprize\n\n";
             $pesan .= "🆔 *No. Peserta Anda:*\n";
             $pesan .= "*{$peserta->no_peserta}*\n\n";
-            $pesan .= "📱 QR Code absensi akan dikirim setelah pesan ini melalui email, harap cek email anda.\n\n";
-            $pesan .= "✅ *Mohon balas pesan ini dengan kata \"HADIR\" untuk konfirmasi kehadiran Anda.*\n\n";
-            $pesan .= "Terima kasih.\n\n";
+            $pesan .= "📱 QR Code absensi akan dikirim melalui email, harap cek email anda.\n\n";
+            $pesan .= "_\"Bersama dalam iman, Bertumbuh dalam kepemimpinan\"_\n\n";
+            $pesan .= "Terima kasih.\n";
+            $pesan .= "Wassalamu'alaikum Wr. Wb.\n\n";
             $pesan .= 'PT. Mada Wikri Tunggal';
 
             // Ambil waktu eksekusi terakhir dari cache

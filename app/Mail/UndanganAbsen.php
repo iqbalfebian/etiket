@@ -63,7 +63,7 @@ class UndanganAbsen extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Undangan Seminar - PT Mada Wikri Tunggal',
+            subject: 'Undangan Iftar Gathering Ramadhan 1447 H - PT Mada Wikri Tunggal',
         );
     }
 
@@ -77,9 +77,9 @@ class UndanganAbsen extends Mailable implements ShouldQueue
             with: [
                 'peserta' => $this->peserta,
                 'qrcodePath' => $this->qrcodePath,
-                'tanggalSeminar' => '5 November 2025',
-                'waktuSeminar' => '09:00 - 17:00 WIB',
-                'tempatSeminar' => 'Hotel Primebiz, Cikarang',
+                'tanggalSeminar' => 'Kamis, 12 Maret 2026',
+                'waktuSeminar' => '17:00 WIB – Selesai',
+                'tempatSeminar' => 'Nuanza Hotel, Cikarang',
                 'linkAbsen' => route('absen.index'),
             ],
         );

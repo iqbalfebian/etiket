@@ -43,8 +43,8 @@ function drawClock() {
 
     // Draw center circle with gradient
     const centerGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 12);
-    centerGradient.addColorStop(0, '#ff6b35');
-    centerGradient.addColorStop(1, '#f7931e');
+    centerGradient.addColorStop(0, '#d4af37');
+    centerGradient.addColorStop(1, '#b8860b');
     
     ctx.beginPath();
     ctx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
@@ -148,10 +148,10 @@ function drawClock() {
     ctx.stroke();
     ctx.restore();
 
-    // Draw second hand with orange color and shadow
+    // Draw second hand with gold color and shadow
     const secondAngle = (seconds * 6 - 90) * (Math.PI / 180);
     ctx.save();
-    ctx.shadowColor = 'rgba(255, 107, 53, 0.5)';
+    ctx.shadowColor = 'rgba(212, 175, 55, 0.6)';
     ctx.shadowBlur = 3;
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
@@ -161,7 +161,7 @@ function drawClock() {
         centerX + radius * 0.85 * Math.cos(secondAngle),
         centerY + radius * 0.85 * Math.sin(secondAngle)
     );
-    ctx.strokeStyle = '#ff6b35';
+    ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.stroke();
