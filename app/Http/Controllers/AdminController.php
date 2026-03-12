@@ -726,7 +726,7 @@ class AdminController extends Controller
                 $pesan .= "Dengan penuh rasa syukur, kami mengundang Bapak/Ibu untuk hadir dalam:\n";
                 $pesan .= "*🌟 Iftar Gathering Ramadhan 1447 Hijriah*\n\n";
                 $pesan .= "📅 *Hari/Tanggal:* Kamis, 12 Maret 2026\n";
-                $pesan .= "⏰ *Waktu:* 17:00 WIB – Selesai\n";
+                $pesan .= "⏰ *Waktu:* 15:00 WIB – Selesai\n";
                 $pesan .= "📍 *Tempat:* Nuanza Hotel, Cikarang\n";
                 $pesan .= "🎤 *Penceramah:* Ust. Muhammad Akbar Satrio SE.Sy., M.SI\n\n";
                 $pesan .= "✨ *Rangkaian Acara:*\n";
@@ -797,7 +797,7 @@ class AdminController extends Controller
             $pesan .= "Dengan penuh rasa syukur, kami mengundang Bapak/Ibu untuk hadir dalam:\n";
             $pesan .= "*🌟 Iftar Gathering Ramadhan 1447 Hijriah*\n\n";
             $pesan .= "📅 *Hari/Tanggal:* Kamis, 12 Maret 2026\n";
-            $pesan .= "⏰ *Waktu:* 17:00 WIB – Selesai\n";
+            $pesan .= "⏰ *Waktu:* 15:00 WIB – Selesai\n";
             $pesan .= "📍 *Tempat:* Nuanza Hotel, Cikarang\n";
             $pesan .= "🎤 *Penceramah:* Ust. Muhammad Akbar Satrio SE.Sy., M.SI\n\n";
             $pesan .= "✨ *Rangkaian Acara:*\n";
