@@ -188,17 +188,18 @@
 
                     <form action="{{ route('absen.check') }}" method="POST" class="absen-form" id="absenForm">
                         @csrf
-                        <div class="form-group-absen">
+                        <div class="form-group-absen autocomplete-wrapper">
                             <input
                                 type="text"
                                 id="no_peserta"
                                 name="no_peserta"
                                 class="absen-input-custom @if(session('already_absen') || session('success_absen')) disabled-input @endif"
-                                placeholder="@if(session('already_absen')) No. Peserta sudah terdaftar hari ini @elseif(session('success_absen')) Absen berhasil dicatat @else INPUT NO. PESERTA DISINI .... @endif"
+                                placeholder="@if(session('already_absen')) No. Peserta sudah terdaftar hari ini @elseif(session('success_absen')) Absen berhasil dicatat @else No. Peserta atau Nama Peserta ... @endif"
                                 value="{{ session('absen_data.no_peserta') ?? '' }}"
                                 required
                                 @if(session('already_absen') || session('success_absen')) disabled @else autofocus @endif
                                 autocomplete="off">
+                            <div id="autocomplete-dropdown" class="autocomplete-dropdown" style="display:none;"></div>
                         </div>
 
                         <div class="button-row">
@@ -257,6 +258,103 @@
     </audio>
 
     <script src="{{ asset('js/absen.js') }}"></script>
+    <script>
+    (function() {
+        const searchUrl = '{{ route("absen.search") }}';
+        const input = document.getElementById('no_peserta');
+        const dropdown = document.getElementById('autocomplete-dropdown');
+        if (!input || !dropdown) return;
+
+        let debounceTimer = null;
+        let activeIndex = -1;
+        let suggestions = [];
+
+        function renderDropdown(items) {
+            suggestions = items;
+            activeIndex = -1;
+            if (!items.length) { dropdown.style.display = 'none'; return; }
+
+            dropdown.innerHTML = items.map((item, i) => `
+                <div class="autocomplete-item" data-index="${i}" data-no="${item.no_peserta}">
+                    <span class="ac-nama">${escapeHtml(item.nama_lengkap)}</span>
+                    <span class="ac-no">${escapeHtml(item.no_peserta)}</span>
+                </div>
+            `).join('');
+            dropdown.style.display = 'block';
+
+            dropdown.querySelectorAll('.autocomplete-item').forEach(el => {
+                el.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    selectItem(parseInt(this.dataset.index));
+                });
+            });
+        }
+
+        function selectItem(idx) {
+            if (suggestions[idx]) {
+                input.value = suggestions[idx].no_peserta;
+                closeDropdown();
+                input.focus();
+                // Auto-submit setelah pilih nama
+                setTimeout(() => document.getElementById('absenForm').submit(), 120);
+            }
+        }
+
+        function closeDropdown() {
+            dropdown.style.display = 'none';
+            activeIndex = -1;
+        }
+
+        function setActive(idx) {
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            items.forEach(el => el.classList.remove('ac-active'));
+            if (idx >= 0 && idx < items.length) {
+                items[idx].classList.add('ac-active');
+                activeIndex = idx;
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        input.addEventListener('input', function() {
+            const q = this.value.trim();
+            clearTimeout(debounceTimer);
+            if (q.length < 2) { closeDropdown(); return; }
+            debounceTimer = setTimeout(() => {
+                fetch(searchUrl + '?q=' + encodeURIComponent(q))
+                    .then(r => r.json())
+                    .then(data => renderDropdown(data))
+                    .catch(() => closeDropdown());
+            }, 250);
+        });
+
+        input.addEventListener('keydown', function(e) {
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            if (dropdown.style.display === 'none' || !items.length) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                setActive(Math.min(activeIndex + 1, items.length - 1));
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                setActive(Math.max(activeIndex - 1, 0));
+            } else if (e.key === 'Enter' && activeIndex >= 0) {
+                e.preventDefault();
+                selectItem(activeIndex);
+            } else if (e.key === 'Escape') {
+                closeDropdown();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+    })();
+    </script>
     <script>
         // Set variabel dari Blade ke JavaScript via data attributes
         const bodyElement = document.body;

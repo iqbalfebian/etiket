@@ -19,6 +19,22 @@ class AbsenController extends Controller
         return view('absen.index', compact('last5Absen'));
     }
 
+    public function searchPeserta(Request $request)
+    {
+        $query = trim($request->get('q', ''));
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $peserta = Peserta::where('nama_lengkap', 'LIKE', "%{$query}%")
+            ->orWhere('no_peserta', 'LIKE', "%{$query}%")
+            ->orderBy('no_peserta')
+            ->limit(8)
+            ->get(['id', 'nama_lengkap', 'no_peserta']);
+
+        return response()->json($peserta);
+    }
+
     public function check(Request $request)
     {
         $request->validate([

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 // Route Absen (Public)
 Route::get('/', [AbsenController::class, 'index'])->name('absen.index');
 Route::post('/absen/check', [AbsenController::class, 'check'])->name('absen.check');
+Route::get('/absen/search', [AbsenController::class, 'searchPeserta'])->name('absen.search');
 
 // Route Admin (Protected)
 Route::prefix('admin')->group(function () {
