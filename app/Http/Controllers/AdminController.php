@@ -735,7 +735,7 @@ class AdminController extends Controller
                 $pesan .= "Buka Puasa Bersama | Game & Doorprize\n\n";
                 $pesan .= "🆔 *No. Peserta Anda:*\n";
                 $pesan .= "*{$peserta->no_peserta}*\n\n";
-                $pesan .= "📱 QR Code absensi akan dikirim melalui email, harap cek email anda.\n\n";
+                $pesan .= "📱 QR Code absensi akan dikirim melalui email, harap cek email anda. *Jika belum menerima undangan di email, mohon segera konfirmasi ke bagian HRD.*\n\n";
                 $pesan .= "_\"Bersama dalam iman, Bertumbuh dalam kepemimpinan\"_\n\n";
                 $pesan .= "Terima kasih.\n";
                 $pesan .= "Wassalamu'alaikum Wr. Wb.\n\n";
@@ -806,7 +806,7 @@ class AdminController extends Controller
             $pesan .= "Buka Puasa Bersama | Game & Doorprize\n\n";
             $pesan .= "🆔 *No. Peserta Anda:*\n";
             $pesan .= "*{$peserta->no_peserta}*\n\n";
-            $pesan .= "📱 QR Code absensi akan dikirim melalui email, harap cek email anda.\n\n";
+            $pesan .= "📱 QR Code absensi akan dikirim melalui email, harap cek email anda. *Jika belum menerima undangan di email, mohon segera konfirmasi ke bagian HRD.*\n\n";
             $pesan .= "_\"Bersama dalam iman, Bertumbuh dalam kepemimpinan\"_\n\n";
             $pesan .= "Terima kasih.\n";
             $pesan .= "Wassalamu'alaikum Wr. Wb.\n\n";
@@ -970,8 +970,7 @@ class AdminController extends Controller
         }
 
         $peserta = Peserta::where(function ($q) use ($query) {
-            $q
-                ->where('nama_lengkap', 'like', '%' . $query . '%')
+            $q->where('nama_lengkap', 'like', '%' . $query . '%')
                 ->orWhere('no_peserta', 'like', '%' . $query . '%')
                 ->orWhere('email', 'like', '%' . $query . '%')
                 ->orWhere('no_hp', 'like', '%' . $query . '%');
