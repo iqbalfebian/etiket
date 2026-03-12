@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class AdminController extends Controller
 {
@@ -964,20 +964,21 @@ class AdminController extends Controller
     public function absenSearchPeserta(Request $request)
     {
         $query = $request->get('q', '');
-        
+
         if (empty($query)) {
             return response()->json([]);
         }
 
-        $peserta = Peserta::where(function($q) use ($query) {
-                $q->where('nama_lengkap', 'like', '%' . $query . '%')
-                  ->orWhere('no_peserta', 'like', '%' . $query . '%')
-                  ->orWhere('email', 'like', '%' . $query . '%')
-                  ->orWhere('no_hp', 'like', '%' . $query . '%');
-            })
+        $peserta = Peserta::where(function ($q) use ($query) {
+            $q
+                ->where('nama_lengkap', 'like', '%' . $query . '%')
+                ->orWhere('no_peserta', 'like', '%' . $query . '%')
+                ->orWhere('email', 'like', '%' . $query . '%')
+                ->orWhere('no_hp', 'like', '%' . $query . '%');
+        })
             ->limit(10)
             ->get()
-            ->map(function($item) {
+            ->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'nama_lengkap' => $item->nama_lengkap,
@@ -1035,10 +1036,10 @@ class AdminController extends Controller
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        
+
         // Set judul
         $sheet->setTitle('Data Absen');
-        
+
         // Header
         $headers = ['ID', 'Nama Peserta', 'No. Peserta', 'Email', 'No. HP', 'Tanggal Masuk', 'Nomor Tiket'];
         $col = 'A';
@@ -1046,7 +1047,7 @@ class AdminController extends Controller
             $sheet->setCellValue($col . '1', $header);
             $col++;
         }
-        
+
         // Style header
         $headerStyle = [
             'font' => [
@@ -1070,7 +1071,7 @@ class AdminController extends Controller
         ];
         $sheet->getStyle('A1:G1')->applyFromArray($headerStyle);
         $sheet->getRowDimension('1')->setRowHeight(25);
-        
+
         // Data
         $row = 2;
         foreach ($absen as $item) {
@@ -1083,7 +1084,7 @@ class AdminController extends Controller
             $sheet->setCellValue('G' . $row, $item->nomor_tiket ?? '-');
             $row++;
         }
-        
+
         // Style data
         $dataStyle = [
             'borders' => [
@@ -1099,27 +1100,27 @@ class AdminController extends Controller
         if ($lastRow >= 2) {
             $sheet->getStyle('A2:G' . $lastRow)->applyFromArray($dataStyle);
         }
-        
+
         // Auto width columns
         foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
-        
+
         // Set alignment untuk kolom tertentu
         if ($lastRow >= 2) {
             $sheet->getStyle('A2:A' . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('F2:F' . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
-        
+
         // Generate filename
         $filename = 'Data_Absen_' . date('Y-m-d_His') . '.xlsx';
-        
+
         // Download
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
-        
+
         $writer->save('php://output');
         exit;
     }
